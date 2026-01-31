@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam Seating Engine - Login</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .login-container {
+            max-width: 450px;
+            width: 100%;
+            padding: 20px;
+        }
+        
+        .login-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+        
+        .login-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .login-header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .login-header p {
+            font-size: 14px;
+            opacity: 0.9;
+            margin: 0;
+        }
+        
+        .login-body {
+            padding: 40px;
+        }
+        
+        .nav-tabs {
+            border: none;
+            margin-bottom: 30px;
+        }
+        
+        .nav-tabs .nav-link {
+            color: #666;
+            border: none;
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            padding: 12px 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-tabs .nav-link:hover {
+            border-bottom-color: #667eea;
+            color: #667eea;
+        }
+        
+        .nav-tabs .nav-link.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+            background: transparent;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        
+        .form-control {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 12px 15px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.15);
+        }
+        
+        .btn-login {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+        
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+            color: white;
+        }
+        
+        .btn-login:active {
+            transform: translateY(0);
+        }
+        
+        .error-message {
+            color: #dc3545;
+            font-size: 13px;
+            margin-top: 10px;
+            padding: 10px;
+            background: #f8d7da;
+            border-radius: 6px;
+            display: none;
+        }
+        
+        .success-message {
+            color: #155724;
+            font-size: 13px;
+            margin-top: 10px;
+            padding: 10px;
+            background: #d4edda;
+            border-radius: 6px;
+            display: none;
+        }
+        
+        .signup-link {
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        .signup-link p {
+            margin: 0;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .signup-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .signup-link a:hover {
+            text-decoration: underline;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 10px;
+        }
+        
+        .spinner-border {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <h1>🎓 Exam Seating Engine</h1>
+                <p>Intelligent seating allocation system</p>
+            </div>
+            
+            <div class="login-body">
+                <!-- Navigation Tabs -->
+                <ul class="nav nav-tabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="admin-tab" data-bs-toggle="tab" data-bs-target="#admin-panel" type="button" role="tab">
+                            Admin / Teacher
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="student-tab" data-bs-toggle="tab" data-bs-target="#student-panel" type="button" role="tab">
+                            Student
+                        </button>
+                    </li>
+                </ul>
+                
+                <!-- Tab Content -->
+                <div class="tab-content">
+                    <!-- Admin/Teacher Login Tab -->
+                    <div class="tab-pane fade show active" id="admin-panel" role="tabpanel">
+                        <form id="adminLoginForm">
+                            <div class="form-group">
+                                <label class="form-label" for="adminUsername">Username</label>
+                                <input type="text" class="form-control" id="adminUsername" name="username" placeholder="Enter your username" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label" for="adminPassword">Password</label>
+                                <input type="password" class="form-control" id="adminPassword" name="password" placeholder="Enter your password" required>
+                            </div>
+                            
+                            <div id="adminError" class="error-message"></div>
+                            <div id="adminSuccess" class="success-message"></div>
+                            
+                            <div class="loading" id="adminLoading">
+                                <div class="spinner-border text-primary" role="status"></div>
+                                <span>Logging in...</span>
+                            </div>
+                            
+                            <button type="submit" class="btn-login" id="adminLoginBtn">Login</button>
+                        </form>
+                        
+                        <div class="signup-link">
+                            <p>Don't have an account? <a href="signup.html?role=admin">Sign up as Admin/Teacher</a></p>
+                        </div>
+                    </div>
+                    
+                    <!-- Student Login Tab -->
+                    <div class="tab-pane fade" id="student-panel" role="tabpanel">
+                        <form id="studentLoginForm">
+                            <div class="form-group">
+                                <label class="form-label" for="studentUsername">Username</label>
+                                <input type="text" class="form-control" id="studentUsername" name="username" placeholder="Enter your username" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label" for="studentPassword">Password</label>
+                                <input type="password" class="form-control" id="studentPassword" name="password" placeholder="Enter your password" required>
+                            </div>
+                            
+                            <div id="studentError" class="error-message"></div>
+                            <div id="studentSuccess" class="success-message"></div>
+                            
+                            <div class="loading" id="studentLoading">
+                                <div class="spinner-border text-primary" role="status"></div>
+                                <span>Logging in...</span>
+                            </div>
+                            
+                            <button type="submit" class="btn-login" id="studentLoginBtn">Login</button>
+                        </form>
+                        
+                        <div class="signup-link">
+                            <p>Don't have an account? <a href="signup.html?role=student">Sign up as Student</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        // Admin/Teacher Login Handler
+        document.getElementById('adminLoginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const username = document.getElementById('adminUsername').value.trim();
+            const password = document.getElementById('adminPassword').value;
+            const errorDiv = document.getElementById('adminError');
+            const successDiv = document.getElementById('adminSuccess');
+            const loadingDiv = document.getElementById('adminLoading');
+            const loginBtn = document.getElementById('adminLoginBtn');
+            
+            errorDiv.style.display = 'none';
+            errorDiv.innerHTML = '';
+            successDiv.style.display = 'none';
+            successDiv.innerHTML = '';
+            
+            if (!username || !password) {
+                errorDiv.innerHTML = '❌ Please enter username and password';
+                errorDiv.style.display = 'block';
+                return;
+            }
+            
+            loadingDiv.style.display = 'block';
+            loginBtn.disabled = true;
+            
+            try {
+                console.log('Admin login attempt for:', username);
+                
+                const response = await fetch('http://localhost:8000/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+                
+                console.log('Login response status:', response.status);
+                
+                const data = await response.json();
+                console.log('Login response:', data);
+                
+                if (!response.ok) {
+                    throw new Error(data.detail || data.message || 'Login failed');
+                }
+                
+                // Store token in localStorage
+                localStorage.setItem('token', data.access_token);
+                localStorage.setItem('user_id', data.user_id);
+                localStorage.setItem('username', data.username);
+                localStorage.setItem('role', data.role);
+                
+                successDiv.innerHTML = '✅ Login successful! Redirecting...';
+                successDiv.style.display = 'block';
+                
+                // Redirect to admin dashboard
+                setTimeout(() => {
+                    window.location.href = 'frontend/index.html';
+                }, 1500);
+                
+            } catch (error) {
+                console.error('Admin login error:', error);
+                errorDiv.innerHTML = '❌ ' + (error.message || 'Login failed. Please check your credentials.');
+                errorDiv.style.display = 'block';
+            } finally {
+                loadingDiv.style.display = 'none';
+                loginBtn.disabled = false;
+            }
+        });
+        
+        // Student Login Handler
+        document.getElementById('studentLoginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const username = document.getElementById('studentUsername').value.trim();
+            const password = document.getElementById('studentPassword').value;
+            const errorDiv = document.getElementById('studentError');
+            const successDiv = document.getElementById('studentSuccess');
+            const loadingDiv = document.getElementById('studentLoading');
+            const loginBtn = document.getElementById('studentLoginBtn');
+            
+            errorDiv.style.display = 'none';
+            errorDiv.innerHTML = '';
+            successDiv.style.display = 'none';
+            successDiv.innerHTML = '';
+            
+            if (!username || !password) {
+                errorDiv.innerHTML = '❌ Please enter username and password';
+                errorDiv.style.display = 'block';
+                return;
+            }
+            
+            loadingDiv.style.display = 'block';
+            loginBtn.disabled = true;
+            
+            try {
+                console.log('Student login attempt for:', username);
+                
+                const response = await fetch('http://localhost:8000/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+                
+                console.log('Login response status:', response.status);
+                
+                const data = await response.json();
+                console.log('Login response:', data);
+                
+                if (!response.ok) {
+                    throw new Error(data.detail || data.message || 'Login failed');
+                }
+                
+                // Store token in localStorage
+                localStorage.setItem('token', data.access_token);
+                localStorage.setItem('user_id', data.user_id);
+                localStorage.setItem('username', data.username);
+                localStorage.setItem('role', data.role);
+                
+                successDiv.innerHTML = '✅ Login successful! Redirecting...';
+                successDiv.style.display = 'block';
+                
+                // Redirect to student dashboard
+                setTimeout(() => {
+                    window.location.href = 'frontend/student-dashboard.html';
+                }, 1500);
+                
+            } catch (error) {
+                console.error('Student login error:', error);
+                errorDiv.innerHTML = '❌ ' + (error.message || 'Login failed. Please check your credentials.');
+                errorDiv.style.display = 'block';
+            } finally {
+                loadingDiv.style.display = 'none';
+                loginBtn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>

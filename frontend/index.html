@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intelligent Exam Seating Engine - Admin Dashboard</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-gradient">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold" href="javascript:void(0)" onclick="navigateTo('home'); return false;">
+                <i class="fas fa-chair"></i> Exam Seating Engine
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="javascript:void(0)" onclick="navigateTo('home'); return false;">
+                            <i class="fas fa-home"></i> Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="javascript:void(0)" onclick="navigateTo('upload'); return false;">
+                            <i class="fas fa-file-upload"></i> Upload
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="javascript:void(0)" onclick="navigateTo('halls'); return false;">
+                            <i class="fas fa-building"></i> Halls
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="javascript:void(0)" onclick="navigateTo('generate'); return false;">
+                            <i class="fas fa-magic"></i> Generate
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="javascript:void(0)" onclick="navigateTo('results'); return false;">
+                            <i class="fas fa-list"></i> Results
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="javascript:void(0)" onclick="navigateTo('help'); return false;">
+                            <i class="fas fa-question-circle"></i> Help
+                        </a>
+                    </li>
+                </ul>
+                <div id="userInfo" style="margin-left: 20px;"></div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Alert Container -->
+    <div class="container-fluid mt-3">
+        <div id="alertContainer"></div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container-fluid">
+        
+        <!-- HOME PAGE -->
+        <section id="home-page" class="page-section active">
+            <div class="row mt-5">
+                <div class="col-md-12">
+                    <div class="jumbotron-custom">
+                        <h1 class="display-4 fw-bold">Welcome to Exam Seating Engine</h1>
+                        <p class="lead">Intelligent, Constraint-Based Automated Exam Seating System</p>
+                        <hr class="my-4">
+                        <p>An advanced system to automatically arrange students in exam halls while preventing malpractice and optimizing space utilization.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Statistics Row -->
+            <div class="row mt-5 mb-4">
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="stat-icon bg-primary">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="stat-students">0</h3>
+                            <p>Total Students</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="stat-icon bg-success">
+                            <i class="fas fa-building"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="stat-halls">0</h3>
+                            <p>Total Halls</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="stat-icon bg-info">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="stat-arrangements">0</h3>
+                            <p>Arrangements</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="stat-icon bg-warning">
+                            <i class="fas fa-chart-pie"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="stat-utilization">0%</h3>
+                            <p>Avg Utilization</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="row mt-5">
+                <div class="col-md-12">
+                    <h3 class="mb-4">Quick Actions</h3>
+                </div>
+            </div>
+
+            <div class="row mb-5">
+                <div class="col-md-4">
+                    <div class="action-card" onclick="navigateTo('upload')">
+                        <div class="action-icon">
+                            <i class="fas fa-file-csv"></i>
+                        </div>
+                        <h4>Step 1: Upload Students</h4>
+                        <p>Import student data from Excel or CSV file</p>
+                        <span class="badge bg-primary">Import Data</span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="action-card" onclick="navigateTo('halls')">
+                        <div class="action-icon">
+                            <i class="fas fa-chair"></i>
+                        </div>
+                        <h4>Step 2: Configure Halls</h4>
+                        <p>Define exam halls with seating capacity</p>
+                        <span class="badge bg-success">Setup Halls</span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="action-card" onclick="navigateTo('generate')">
+                        <div class="action-icon">
+                            <i class="fas fa-magic"></i>
+                        </div>
+                        <h4>Step 3: Generate Seating</h4>
+                        <p>Run intelligent algorithm to arrange students</p>
+                        <span class="badge bg-warning">Generate</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Features Section -->
+            <div class="row mt-5">
+                <div class="col-md-12">
+                    <h3 class="mb-4">Key Features</h3>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <h5>Intelligent Algorithm</h5>
+                        <p>Constraint-based optimization preventing same-subject adjacency and department row clustering</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h5>Malpractice Prevention</h5>
+                        <p>Strategic seating arrangement to minimize cheating opportunities</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-tachometer-alt"></i>
+                        </div>
+                        <h5>Lightning Fast</h5>
+                        <p>Arrange 200+ students in under 1 second with optimal space utilization</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-file-pdf"></i>
+                        </div>
+                        <h5>PDF Reports</h5>
+                        <p>Generate downloadable seating charts and student rosters</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-audit"></i>
+                        </div>
+                        <h5>Full Audit Trail</h5>
+                        <p>Complete logging of all seating decisions and constraint validations</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-expand"></i>
+                        </div>
+                        <h5>Scalable Design</h5>
+                        <p>Handles multiple halls, departments, and thousands of students</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- UPLOAD PAGE -->
+        <section id="upload-page" class="page-section">
+            <div class="row mt-4">
+                <div class="col-md-8 offset-md-2">
+                    <div class="card shadow">
+                        <div class="card-header bg-gradient-primary">
+                            <h4 class="mb-0">
+                                <i class="fas fa-file-upload"></i> Upload Student Data
+                            </h4>
+                        </div>
+                        <div class="card-body">
+                            <p class="text-muted mb-4">Upload a CSV or Excel file with student information</p>
+
+                            <!-- File Format Guide -->
+                            <div class="alert alert-info">
+                                <h6 class="alert-heading">
+                                    <i class="fas fa-info-circle"></i> File Format
+                                </h6>
+                                <p class="mb-0">Your file should have these columns:</p>
+                                <code>reg_no, name, department, subject_code</code>
+                                <hr class="my-2">
+                                <p class="mb-0"><strong>Example:</strong> CS001, Raj Kumar, Computer Science, CS101</p>
+                            </div>
+
+                            <!-- Upload Form -->
+                            <form id="uploadForm" enctype="multipart/form-data">
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">Select File (.csv or .xlsx)</label>
+                                    <div class="input-group">
+                                        <input type="file" class="form-control" id="fileInput" accept=".csv,.xlsx" required>
+                                        <button class="btn btn-outline-secondary" type="button" onclick="downloadTemplate()">
+                                            <i class="fas fa-download"></i> Download Template
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <small class="text-muted">
+                                        <i class="fas fa-check-circle"></i> Supported formats: CSV, Excel (.xlsx)
+                                    </small>
+                                </div>
+
+                                <button type="button" class="btn btn-primary btn-lg w-100" onclick="uploadStudentFile()">
+                                    <i class="fas fa-cloud-upload-alt"></i> Upload Students
+                                </button>
+                            </form>
+
+                            <!-- Upload Result -->
+                            <div id="uploadResult" class="mt-4"></div>
+
+                            <!-- Recent Uploads -->
+                            <hr class="my-4">
+                            <h5>Recent Uploads</h5>
+                            <div id="recentUploads" class="table-responsive">
+                                <p class="text-muted">No uploads yet</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- HALLS PAGE -->
+        <section id="halls-page" class="page-section">
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <div class="card shadow">
+                        <div class="card-header bg-gradient-success">
+                            <h4 class="mb-0">
+                                <i class="fas fa-plus-circle"></i> Add New Hall
+                            </h4>
+                        </div>
+                        <div class="card-body">
+                            <form id="hallForm">
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">Hall Name</label>
+                                    <input type="text" class="form-control" id="hallName" placeholder="e.g., Main Auditorium" required>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label fw-bold">Number of Rows</label>
+                                            <input type="number" class="form-control" id="rows" placeholder="10" min="1" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label fw-bold">Number of Columns</label>
+                                            <input type="number" class="form-control" id="columns" placeholder="10" min="1" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">Location</label>
+                                    <input type="text" class="form-control" id="location" placeholder="e.g., Building A, Floor 1">
+                                </div>
+                                <div class="alert alert-light">
+                                    <strong>Total Capacity:</strong> <span id="capacityDisplay">0</span> seats
+                                </div>
+                                <button type="button" class="btn btn-success w-100" onclick="addHall()">
+                                    <i class="fas fa-plus"></i> Add Hall
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="card shadow">
+                        <div class="card-header bg-gradient-success">
+                            <h4 class="mb-0">
+                                <i class="fas fa-list"></i> Existing Halls
+                            </h4>
+                        </div>
+                        <div class="card-body">
+                            <div id="hallsList" class="table-responsive">
+                                <p class="text-muted">No halls added yet</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- GENERATE PAGE -->
+        <section id="generate-page" class="page-section">
+            <div class="row mt-4">
+                <div class="col-md-8 offset-md-2">
+                    <div class="card shadow">
+                        <div class="card-header bg-gradient-warning">
+                            <h4 class="mb-0">
+                                <i class="fas fa-magic"></i> Generate Seating Arrangement
+                            </h4>
+                        </div>
+                        <div class="card-body">
+                            <!-- Prerequisites Check -->
+                            <div id="prerequisiteAlert" class="alert alert-warning d-none">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <strong>Prerequisites Not Met:</strong> Please upload students and add halls first.
+                            </div>
+
+                            <form id="generateForm">
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">Exam Date *</label>
+                                    <input type="date" class="form-control" id="examDate" required>
+                                    <small class="text-muted">Date of the examination</small>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">Select Subjects to Conduct *</label>
+                                    <div id="subjectsCheckbox" class="form-check-group">
+                                        <p class="text-muted">Loading subjects...</p>
+                                    </div>
+                                    <small class="text-muted">Only students writing selected subjects will be seated</small>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">Select Halls *</label>
+                                    <div id="hallsCheckbox" class="form-check-group">
+                                        <p class="text-muted">Loading halls...</p>
+                                    </div>
+                                </div>
+
+                                <div class="alert alert-info">
+                                    <h6 class="alert-heading">
+                                        <i class="fas fa-lightbulb"></i> Seating Rules Applied
+                                    </h6>
+                                    <ul class="mb-0 small">
+                                        <li><strong>Rule 1:</strong> Same Subject Separation - Students writing same subject won't sit adjacent</li>
+                                        <li><strong>Rule 2:</strong> Department Spreading - Students from same department spread across different rows</li>
+                                        <li><strong>Rule 3:</strong> Subject Mixing - Different subject students mixed in same hall for exam supervision</li>
+                                        <li><strong>Rule 4:</strong> Hall Optimization - Even seat distribution across selected halls</li>
+                                    </ul>
+                                </div>
+
+                                <button type="button" class="btn btn-warning btn-lg w-100" onclick="generateSeating()">
+                                    <i class="fas fa-cogs"></i> Generate Seating Arrangement
+                                </button>
+                            </form>
+
+                            <!-- Generation Result -->
+                            <div id="generationResult" class="mt-4"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- RESULTS PAGE -->
+        <section id="results-page" class="page-section">
+            <div class="row mt-4">
+                <div class="col-md-12">
+                    <div class="card shadow">
+                        <div class="card-header bg-gradient-info">
+                            <h4 class="mb-0">
+                                <i class="fas fa-list-alt"></i> Seating Arrangements
+                            </h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control" id="searchArrangement" placeholder="Search arrangements...">
+                                </div>
+                                <div class="col-md-6">
+                                    <button class="btn btn-primary" onclick="refreshArrangements()">
+                                        <i class="fas fa-sync"></i> Refresh
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="table-responsive">
+                                <table class="table table-hover" id="arrangementsTable">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Exam Name</th>
+                                            <th>Students Arranged</th>
+                                            <th>Utilization</th>
+                                            <th>Status</th>
+                                            <th>Date</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="arrangementsTableBody">
+                                        <tr>
+                                            <td colspan="7" class="text-center text-muted">No arrangements yet</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seating Detail Modal -->
+            <div class="modal fade" id="seatingDetailModal" tabindex="-1">
+                <div class="modal-dialog modal-xl">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="seatingDetailTitle">Seating Arrangement Details</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <!-- Tabs for different views -->
+                            <ul class="nav nav-tabs mb-3" id="seatingTabs" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="tableViewTab" data-bs-toggle="tab" 
+                                            data-bs-target="#tableViewContent" type="button" role="tab">
+                                        <i class="fas fa-table"></i> Table View
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="seatMapTab" data-bs-toggle="tab" 
+                                            data-bs-target="#seatMapViewContent" type="button" role="tab">
+                                        <i class="fas fa-chair"></i> Seat Map
+                                    </button>
+                                </li>
+                            </ul>
+
+                            <!-- Tab Content -->
+                            <div class="tab-content" id="seatingTabContent">
+                                <!-- Table View Tab -->
+                                <div class="tab-pane fade show active" id="tableViewContent" role="tabpanel">
+                                    <div id="seatingDetailContent">Loading...</div>
+                                </div>
+
+                                <!-- Seat Map Tab -->
+                                <div class="tab-pane fade" id="seatMapViewContent" role="tabpanel">
+                                    <div class="text-center" id="seatMapContainer" style="max-height: 600px; overflow-y: auto;">
+                                        <p class="text-muted">Loading seat map...</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-info" id="viewSeatMapBtn">
+                                <i class="fas fa-chair"></i> View Seat Map
+                            </button>
+                            <button type="button" class="btn btn-primary" id="downloadPdfBtn">
+                                <i class="fas fa-file-pdf"></i> Download PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- HELP PAGE -->
+        <section id="help-page" class="page-section">
+            <div class="row mt-4">
+                <div class="col-md-8 offset-md-2">
+                    <div class="card shadow">
+                        <div class="card-header bg-gradient-info">
+                            <h4 class="mb-0">
+                                <i class="fas fa-question-circle"></i> Help & Documentation
+                            </h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="accordion" id="helpAccordion">
+                                <!-- How to Use -->
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#helpHow">
+                                            <i class="fas fa-question"></i> How to Use This System?
+                                        </button>
+                                    </h2>
+                                    <div id="helpHow" class="accordion-collapse collapse show" data-bs-parent="#helpAccordion">
+                                        <div class="accordion-body">
+                                            <ol>
+                                                <li><strong>Upload Students:</strong> Go to the Upload section and import a CSV or Excel file with student data.</li>
+                                                <li><strong>Configure Halls:</strong> Add exam halls with their seating capacity.</li>
+                                                <li><strong>Generate Seating:</strong> Click "Generate" to run the intelligent algorithm.</li>
+                                                <li><strong>View Results:</strong> Check the generated seating arrangement.</li>
+                                                <li><strong>Download PDF:</strong> Export the seating chart as a PDF.</li>
+                                            </ol>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- File Format -->
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#helpFormat">
+                                            <i class="fas fa-file"></i> What's the File Format?
+                                        </button>
+                                    </h2>
+                                    <div id="helpFormat" class="accordion-collapse collapse" data-bs-parent="#helpAccordion">
+                                        <div class="accordion-body">
+                                            <p>Your CSV/Excel file must have these columns:</p>
+                                            <table class="table table-sm">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Column</th>
+                                                        <th>Example</th>
+                                                        <th>Description</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td><strong>reg_no</strong></td>
+                                                        <td>CS001</td>
+                                                        <td>Student registration number</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><strong>name</strong></td>
+                                                        <td>Raj Kumar</td>
+                                                        <td>Student full name</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><strong>department</strong></td>
+                                                        <td>Computer Science</td>
+                                                        <td>Department name</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><strong>subject_code</strong></td>
+                                                        <td>CS101</td>
+                                                        <td>Subject/Course code</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Algorithm Explanation -->
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#helpAlgorithm">
+                                            <i class="fas fa-brain"></i> How Does the Algorithm Work?
+                                        </button>
+                                    </h2>
+                                    <div id="helpAlgorithm" class="accordion-collapse collapse" data-bs-parent="#helpAccordion">
+                                        <div class="accordion-body">
+                                            <p>The system uses an intelligent <strong>constraint-based optimization algorithm</strong>:</p>
+                                            <h6>Key Features:</h6>
+                                            <ul>
+                                                <li><strong>Subject Adjacency Prevention:</strong> Students studying the same subject are never seated adjacent (left, right, above, or below)</li>
+                                                <li><strong>Department Row Separation:</strong> Students from the same department cannot sit in the same row</li>
+                                                <li><strong>Hall Utilization:</strong> Optimizes seating to achieve 85-95% space utilization</li>
+                                                <li><strong>Randomization:</strong> Uses randomization to prevent predictable patterns and reduce cheating opportunities</li>
+                                            </ul>
+                                            <h6>Benefits:</h6>
+                                            <ul>
+                                                <li>Extremely fast (< 1 second for 200+ students)</li>
+                                                <li>Prevents malpractice by strategic separation</li>
+                                                <li>Fair and transparent process</li>
+                                                <li>Fully auditable with complete logging</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Constraints -->
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#helpConstraints">
+                                            <i class="fas fa-lock"></i> What are the Constraints?
+                                        </button>
+                                    </h2>
+                                    <div id="helpConstraints" class="accordion-collapse collapse" data-bs-parent="#helpAccordion">
+                                        <div class="accordion-body">
+                                            <h6>Hard Constraints (Always enforced):</h6>
+                                            <ul>
+                                                <li>Same-subject students cannot sit adjacent (horizontally or vertically)</li>
+                                                <li>Same-department students cannot sit in the same row</li>
+                                            </ul>
+                                            <h6>Soft Constraints (Optimization goals):</h6>
+                                            <ul>
+                                                <li>Maximize hall utilization</li>
+                                                <li>Minimize empty seats</li>
+                                                <li>Fair distribution across halls</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Troubleshooting -->
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#helpTrouble">
+                                            <i class="fas fa-tools"></i> Troubleshooting
+                                        </button>
+                                    </h2>
+                                    <div id="helpTrouble" class="accordion-collapse collapse" data-bs-parent="#helpAccordion">
+                                        <div class="accordion-body">
+                                            <h6>File Upload Fails:</h6>
+                                            <p>Check that your file has the correct format (reg_no, name, department, subject_code)</p>
+                                            <h6>Generation Fails:</h6>
+                                            <p>Ensure you have uploaded students and added at least one exam hall</p>
+                                            <h6>Not Enough Seats:</h6>
+                                            <p>The system will arrange as many students as possible. Add more halls if needed.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer mt-5 py-4 bg-dark text-white">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-6">
+                    <h6>Intelligent Exam Seating Engine</h6>
+                    <p class="text-muted small">v1.0 | Advanced Academic Project</p>
+                </div>
+                <div class="col-md-6 text-end">
+                    <p class="text-muted small">
+                        <i class="fas fa-copyright"></i> 2026 | All Rights Reserved
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- DataTables JS -->
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+
+    <!-- Auth JS -->
+    <script src="js/auth.js"></script>
+    
+    <!-- Custom JS -->
+    <script src="js/app.js"></script>
+    
+    <script>
+        // Check authentication on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!auth.isAuthenticated()) {
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            // Check if user is admin or teacher - students should not access this page
+            if (!auth.isAdmin()) {
+                alert('Access Denied: Only Admin and Teacher accounts can access this page.');
+                window.location.href = 'student-dashboard.html';
+                return;
+            }
+            
+            // Show user info in navbar if logged in
+            const userInfo = document.getElementById('userInfo');
+            if (userInfo && auth.username) {
+                userInfo.innerHTML = `
+                    <span style="color: white; margin-right: 20px;">Welcome, ${auth.username}! (${auth.role})</span>
+                    <button class="btn btn-sm btn-outline-light" onclick="auth.logout();">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>

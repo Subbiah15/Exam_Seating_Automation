@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard - Exam Seating Engine</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+        }
+        
+        body {
+            background: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .navbar {
+            background: white;
+            border-bottom: 1px solid #eee;
+            padding: 15px 0;
+        }
+        
+        .navbar-brand {
+            font-size: 24px;
+            font-weight: 700;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .navbar-brand i {
+            margin-right: 8px;
+        }
+        
+        .navbar-nav .nav-link {
+            color: #666 !important;
+            font-weight: 500;
+            margin: 0 10px;
+            transition: color 0.3s;
+        }
+        
+        .navbar-nav .nav-link:hover {
+            color: var(--primary-color) !important;
+        }
+        
+        .logout-btn {
+            background: var(--primary-gradient);
+            color: white !important;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 20px;
+            font-weight: 600;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .logout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin-top: 40px;
+        }
+        
+        .welcome-section {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        .welcome-section h1 {
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+        
+        .student-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .info-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .info-label {
+            font-size: 12px;
+            color: #999;
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .info-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: #333;
+            margin: 0;
+        }
+        
+        .seating-section {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        .seating-section h2 {
+            color: #333;
+            margin-bottom: 25px;
+            font-weight: 700;
+        }
+        
+        .seating-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .seating-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+            transition: all 0.3s;
+        }
+        
+        .seating-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+        
+        .seating-card h3 {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+        
+        .seat-details {
+            margin: 15px 0;
+        }
+        
+        .seat-detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .seat-detail-row:last-child {
+            border-bottom: none;
+        }
+        
+        .seat-detail-label {
+            font-size: 13px;
+            opacity: 0.8;
+        }
+        
+        .seat-detail-value {
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .seat-map-btn {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin-top: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .seat-map-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            color: white;
+            text-decoration: none;
+        }
+        
+        .no-seating {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+        }
+        
+        .no-seating i {
+            font-size: 48px;
+            margin-bottom: 15px;
+            color: #ddd;
+        }
+        
+        .loading-spinner {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+        }
+        
+        .spinner-border {
+            width: 40px;
+            height: 40px;
+        }
+        
+        .error-alert {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .alert-dismiss {
+            cursor: pointer;
+            float: right;
+            font-size: 20px;
+            line-height: 1;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container-fluid">
+            <span class="navbar-brand">
+                <i class="bi bi-mortarboard"></i>
+                Exam Seating Engine
+            </span>
+            <div class="ms-auto d-flex align-items-center gap-3">
+                <span id="usernameDisplay" style="color: #666; font-weight: 500;"></span>
+                <button class="logout-btn" id="logoutBtn">
+                    <i class="bi bi-box-arrow-right"></i> Logout
+                </button>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Welcome Section -->
+        <div class="welcome-section">
+            <h1><i class="bi bi-hand-thumbs-up"></i> Welcome, <span id="studentName"></span>!</h1>
+            <p style="color: #999; margin-bottom: 0;">View your assigned seat and exam details below.</p>
+            
+            <div class="student-info">
+                <div class="info-card">
+                    <div class="info-label">Student ID</div>
+                    <p class="info-value" id="studentIdDisplay">-</p>
+                </div>
+                <div class="info-card">
+                    <div class="info-label">Username</div>
+                    <p class="info-value" id="usernameInfoDisplay">-</p>
+                </div>
+                <div class="info-card">
+                    <div class="info-label">Email</div>
+                    <p class="info-value" id="emailDisplay" style="font-size: 14px;">-</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Error Alert -->
+        <div id="errorAlert" class="error-alert" style="display: none;">
+            <span class="alert-dismiss" onclick="document.getElementById('errorAlert').style.display = 'none';">&times;</span>
+            <strong>Error:</strong> <span id="errorMessage"></span>
+        </div>
+        
+        <!-- Seating Assignment Section -->
+        <div class="seating-section">
+            <h2><i class="bi bi-chairs"></i> Your Seating Assignment</h2>
+            
+            <div id="seatingContent">
+                <div class="loading-spinner">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <span style="margin-left: 15px; color: #666;">Loading your seating information...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        // Check authentication
+        if (!requireAuth()) {
+            // Redirect happens in requireAuth()
+        } else if (!auth.isStudent()) {
+            // Redirect admin/teacher to main dashboard
+            window.location.href = 'index.html';
+        }
+        
+        // Display current user info
+        document.getElementById('usernameDisplay').textContent = auth.username;
+        document.getElementById('studentName').textContent = auth.username;
+        
+        // Logout handler
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            if (confirm('Are you sure you want to logout?')) {
+                auth.logout();
+            }
+        });
+        
+        // Load student data and seating
+        async function loadStudentData() {
+            try {
+                // Get current user info
+                const userInfo = await auth.getMe();
+                
+                document.getElementById('usernameInfoDisplay').textContent = userInfo.username;
+                document.getElementById('emailDisplay').textContent = userInfo.email;
+                document.getElementById('studentIdDisplay').textContent = userInfo.student_id || 'N/A';
+                
+                // Load seating for this student
+                loadStudentSeating(userInfo.student_id);
+            } catch (error) {
+                console.error('Error loading user data:', error);
+                showError(error.message);
+            }
+        }
+        
+        // Load student's seating arrangement
+        async function loadStudentSeating(studentId) {
+            try {
+                const response = await auth.apiFetch('http://localhost:8000/api/arrangements/search', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        field: 'student_id',
+                        value: studentId
+                    })
+                });
+                
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.detail || 'Failed to load seating');
+                }
+                
+                const data = await response.json();
+                
+                if (!data.results || data.results.length === 0) {
+                    document.getElementById('seatingContent').innerHTML = `
+                        <div class="no-seating">
+                            <i class="bi bi-inbox"></i>
+                            <h4>No Seating Assignment Found</h4>
+                            <p>Your seating has not been assigned yet. Please check back later.</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // Display seating results
+                displaySeatingResults(data.results);
+            } catch (error) {
+                console.error('Error loading seating:', error);
+                showError(error.message);
+            }
+        }
+        
+        // Display seating results
+        function displaySeatingResults(seats) {
+            if (seats.length === 0) {
+                document.getElementById('seatingContent').innerHTML = `
+                    <div class="no-seating">
+                        <i class="bi bi-inbox"></i>
+                        <h4>No Seating Assignment</h4>
+                        <p>Your seating has not been assigned yet.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = '<div class="seating-grid">';
+            
+            seats.forEach(seat => {
+                const arrangement = seat.arrangement;
+                html += `
+                    <div class="seating-card">
+                        <h3>Exam Hall: ${arrangement?.hall_name || 'Unknown'}</h3>
+                        <div class="seat-details">
+                            <div class="seat-detail-row">
+                                <span class="seat-detail-label">Seat Number:</span>
+                                <span class="seat-detail-value">${seat.seat_number}</span>
+                            </div>
+                            <div class="seat-detail-row">
+                                <span class="seat-detail-label">Exam Date:</span>
+                                <span class="seat-detail-value">${arrangement?.exam_date || 'N/A'}</span>
+                            </div>
+                            <div class="seat-detail-row">
+                                <span class="seat-detail-label">Subject:</span>
+                                <span class="seat-detail-value">${seat.subject || 'N/A'}</span>
+                            </div>
+                            <div class="seat-detail-row">
+                                <span class="seat-detail-label">Row:</span>
+                                <span class="seat-detail-value">${seat.row}</span>
+                            </div>
+                            <div class="seat-detail-row">
+                                <span class="seat-detail-label">Column:</span>
+                                <span class="seat-detail-value">${seat.col}</span>
+                            </div>
+                        </div>
+                        <a href="#" class="seat-map-btn" onclick="viewSeatMap('${arrangement?.arrangement_id}'); return false;">
+                            <i class="bi bi-eye"></i> View Seat Map
+                        </a>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            document.getElementById('seatingContent').innerHTML = html;
+        }
+        
+        // View seat map
+        function viewSeatMap(arrangementId) {
+            // Open seat map in modal or new window
+            window.open(`seat-map.html?id=${arrangementId}`, '_blank', 'width=900,height=700');
+        }
+        
+        // Show error message
+        function showError(message) {
+            document.getElementById('errorMessage').textContent = message;
+            document.getElementById('errorAlert').style.display = 'block';
+            document.getElementById('seatingContent').innerHTML = '';
+        }
+        
+        // Load data on page load
+        window.addEventListener('load', loadStudentData);
+    </script>
+</body>
+</html>

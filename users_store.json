@@ -1,0 +1,39 @@
+{
+  "users": [
+    {
+      "user_id": 2,
+      "username": "raja_12",
+      "password_hash": "68e165ab10005593127946fc056a2dd0530642f6f48949e74fea2c5c69e030a3$c7857c16320f13d45200f7e0095624b04703ff796a1b626df27cc410ce38aa4f",
+      "email": "raja@gmail.com",
+      "role": "admin",
+      "name": "Raja Sekar",
+      "student_id": null,
+      "created_at": "2026-01-31T13:12:53.000797",
+      "is_active": true
+    },
+    {
+      "user_id": 3,
+      "username": "mv_1",
+      "password_hash": "a177597fde4b6a21a97175f9afc94fa462390f4cd0a8197feb1ff500c75fe8c8$371cbd4284ea8139543ba7f5bb545d2ffb3f323a349f703aafc083876672d3fa",
+      "email": "mv@gmail.com",
+      "role": "student",
+      "name": "nemesh",
+      "student_id": "REG1009",
+      "created_at": "2026-01-31T13:20:03.451857",
+      "is_active": true
+    },
+    {
+      "user_id": 4,
+      "username": "demo_student",
+      "password_hash": "8ee9f3cd2130266759ec326f4f6d1162cb491206319029a400d0aed6e3803cb2$24e2c52d668baac3117e880c4557e34a52ef3e2680ee1b571bcb7abcb0240d0b",
+      "email": "student@demo.com",
+      "role": "student",
+      "name": "Demo Student",
+      "student_id": "REG1009",
+      "created_at": "2026-01-31T13:28:53.990893",
+      "is_active": true
+    }
+  ],
+  "next_user_id": 5,
+  "updated_at": "2026-01-31T13:28:53.997466"
+}
